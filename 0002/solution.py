@@ -36,7 +36,7 @@ class Solution:
         first_node = None
         carry = 0
         prev = None
-        while l1 is not None or l2 is not None:
+        while l1 is not None or l2 is not None or carry != 0:
             if l1 is None:
                 l1 = ListNode(0)
             if l2 is None:
@@ -59,9 +59,6 @@ class Solution:
             prev = new_node
             l1 = l1.next
             l2 = l2.next
-
-        if carry > 0:
-            prev.next = ListNode(carry)
         
         return first_node
         
