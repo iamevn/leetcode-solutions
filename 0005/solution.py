@@ -24,6 +24,8 @@ class Solution:
 
         longest = ''
         for center in range(len(s)):
+            if (center + len(longest) // 2) >= len(s):
+                break
             found = palindromeAt(center)
             if len(found) > len(longest):
                 longest = found
