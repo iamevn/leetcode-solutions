@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 from string import ascii_lowercase
-from typing import Any, Callable, Dict, Sequence, Set, Tuple
+from typing import Callable, Dict, Sequence, Set, Tuple, Collection
 
+# Types
 """ NFA:
-tuple (Q, A, T, q0, F)
+(Q, A, T, q0, F)
 Q is a set of states (set of integers)
 A is a set of input symbols (the alphabet) (set of characters)
 T is a transition function mapping state and input to a set of output states (q, a) -> {q...}
@@ -13,7 +14,7 @@ F is a set of final states (set of integers)
 """
 NFA = Tuple[Set[int], Set[str], Dict[Tuple[int, str], Set[int]], int, Set[int]]
 """ DFA:
-tuple (Q, A, T, q0, F)
+(Q, A, T, q0, F)
 Q is a set of states (set of integers)
 A is a set of input symbols (the alphabet) (set of characters)
 T is a transition function mapping state and input to output state (q, a) -> q
@@ -21,8 +22,15 @@ q0 is the start state (integer)
 F is a set of final states (set of integers)
 """
 DFA = Tuple[Set[int], Set[str], Dict[Tuple[int, str], int], int, Set[int]]
+""" TestCase:
+((s, p), b)
+s is string to match
+p is pattern to use for matching
+b is expected result of match on string
+"""
+TestCase = Tuple[Tuple[str, str], bool]
 
-def pattern2NFA(pattern: str, alphabet: Set[str], kleen: str ='*', wildcard: str ='.') -> NFA:
+def pattern2NFA(pattern: str, alphabet: Collection[str], kleen: str ='*', wildcard: str ='.') -> NFA:
     """
     given a string pattern and an alphabet,
     return a tuple describing the NFA equilivant to the pattern
@@ -36,7 +44,7 @@ def pattern2NFA(pattern: str, alphabet: Set[str], kleen: str ='*', wildcard: str
     return value:
     NFA as described above
 
-    raises ArgumentError if either:
+    raises ValueError if either:
     - pattern contains a character not included in the given alphabet
     - kleen or wildcard are in given alphabet
     """
@@ -54,14 +62,14 @@ def NFA2DFA(automata: NFA) -> DFA:
 def matchDFA(automata: DFA, s: str) -> bool:
     """
     returns True is given string is matched by given DFA and False if it is not matched
-    raises ArgumentError if string contains a character not included in the DFA's alphabet
+    raises ValueError if string contains a character not included in the DFA's alphabet
     """
 
 class Solution:
     def isMatch(self, s: str, p: str) -> bool:
         return matchDFA(NFA2DFA(pattern2NFA(p, ascii_lowercase)), s)
                
-def test(algorithm: Callable, test_cases: Tuple[Sequence, Any]) -> None:
+def test(algorithm: Callable, test_cases: Sequence[TestCase]) -> None:
     for test in test_cases:
         attempt = algorithm(*test[0])
         if attempt != test[1]:
@@ -76,6 +84,6 @@ if __name__ == '__main__':
             (("ab", ".*"), True),
             (("aab", "c*a*b"), True),
             (("mississippi", "mis*is*p*."), False),
-    ]
+            ] # type: Sequence[TestCase]
     test(Solution().isMatch, test_cases)
 
