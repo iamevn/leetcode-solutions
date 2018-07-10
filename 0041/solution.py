@@ -83,6 +83,5 @@ if __name__ == '__main__':
             ([0], 1),
             ([1], 2),
             ([3, 2, 1], 4),
-            ([], 4),
     ]
     test(Solution().firstMissingPositive, test_cases)
